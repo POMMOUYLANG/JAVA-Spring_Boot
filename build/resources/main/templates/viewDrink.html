@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            list-style: none;
+            text-decoration: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .wrapper .sidebar {
+            background: rgb(5, 68, 104);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 225px;
+            height: 100%;
+            padding: 20px 0;
+            transition: all 0.5s ease;
+        }
+        .wrapper .sidebar .profile img {
+            display: block;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+        .wrapper .sidebar .profile h3 {
+            color: #ffffff;
+            margin: 10px 0 5px;
+        }
+        .wrapper .sidebar ul li a {
+            display: block;
+            padding: 13px 30px;
+            border-bottom: 1px solid #10558d;
+            color: rgb(241, 237, 237);
+            font-size: 16px;
+            position: relative;
+        }
+        .wrapper .sidebar ul li a .icon {
+            color: #dee4ec;
+            width: 30px;
+            display: inline-block;
+        }
+        .wrapper .sidebar ul li a:hover {
+            color: #0c7db1;
+            background: white;
+            border-right: 2px solid rgb(5, 68, 104);
+        }
+        .wrapper .sidebar ul li a:hover .icon {
+            color: #0c7db1;
+        }
+        .wrapper .sidebar ul li a:hover:before {
+            display: block;
+        }
+        .list-name div:nth-child(even) {
+            background-color: #04436817;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <div class="profile mb-[30px] text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/206/206874.png" alt="cashier">
+                <h3>Admin</h3>
+                <p class="text-sm text-[#cef0fd]">Admin</p>
+            </div>
+            <!--menu item-->
+            <ul>
+                <li>
+                    <a th:href="@{/admin/user_management/add_new_user}">
+                        <span class="icon"><i class="fas fa-regular fa-user"></i></span>
+                        <span class="item">New Cashier</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/product_management/add_new_product}">
+                        <span class="icon"><i class="fas fa-thin fa-mug-hot"></i></span>
+                        <span class="item">New Product</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/product_management/add_new_category}">
+                        <span class="icon"><i class="fas fa-thin fa-clipboard"></i></span>
+                        <span class="item">New Category</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/category_management}">
+                        <span class="icon"><i class="fas fa-thin fa-clipboard"></i></span>
+                        <span class="item">Manage Category</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#orderhistory" id="Orderhistory">
+                        <span class="icon" id="Orderhistory"><i class="fas fa-database"></i></span>
+                        <span class="item" id="Orderhistory">Orderhistory</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/table_management}">
+                        <span class="icon"><i class="fas fa-thin fa-couch"></i></span>
+                        <span class="item">Manage Table</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/login}">
+                        <span class="icon"><i class="fas fa-cog"></i></span>
+                        <span class="item">Log out</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <div class="left ml-56 ">
+                <ul class="list flex pl-10 gap-2 pt-1 bg-gray-100 border-b-2 border-b-[#044468]">
+                    <a class="tab px-6 border-2 border-t-[#044468] border-x-[#044468] rounded-t-lg p-1 hover:bg-[#044468] hover:border-b-[#044468]" th:href="@{/admin/user_management}">Cashiers</a>
+                    <a class="tab px-6 border-2 border-t-[#044468] border-x-[#044468] rounded-t-lg p-1 bg-[#044468] border-b-[#044468] text-white hover:bg-[#044468] hover:border-b-[#044468]" th:href="@{/admin/product_management/drink}">Drinks</a>
+                    <a class="tab px-6 border-2 border-t-[#044468] border-x-[#044468] rounded-t-lg p-1 hover:bg-[#044468] hover:border-b-[#044468]" th:href="@{/admin/product_management/food}">Foods</a>
+                </ul>
+                <div class="tabcontent" id="Cashiers">
+                    <div class="grid grid-cols-2 bg-gray-100 p-3">
+                        <div>
+                            <div class="grid grid-cols-5 mx-2 p-3 text-neutral-100 bg-[#044468] rounded-md shadow-md">
+                                <p>No</p>
+                                <p>Drink Code</p>
+                                <p>Drink Name</p>
+                                <p>Price($)</p>
+                                <p class="pl-5">Action</p>
+                            </div>
+                                <div class="list-name block h-[85vh] overflow-auto">
+                                    <div th:each="drink, iStat : ${drinks}" class="cash grid grid-cols-5 pl-5 mx-2.5 rounded-md shadow-md p-1 bg-white">
+                                        <p class="flex items-center" th:text="${iStat.index + 1}"></p>
+                                        <p class="flex items-center" th:text="${drink.code}"></p>
+                                        <a class="flex items-center underline" th:href="@{/admin/product_management/drink/{id} (id = ${drink.id})}" th:text="${drink.name}" ></a>
+                                        <p class="flex items-center" th:text="${drink.price}"></p>
+                                        <p class="flex items-center">
+                                            <a th:href="@{/admin/product_management/edit/{id} (id=${drink.id})}" class="edit pr-5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="blue" class="w-6 h-6">
+                                                <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
+                                                </svg>                                                                          
+                                            </a>
+                                            <a th:href="@{/product_management/delete/{id} (id=${drink.id})}" class="delete"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="red" class="w-6 h-6" onclick="storeSth()">
+                                                <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clip-rule="evenodd" />
+                                                </svg>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="right border-black bg-[#044468] h-[92vh] rounded-md shadow-md p-3" id="Cashiers">
+                            <h1 class="font-semibold text-center text-2xl bg-white py-1 rounded-md shadow-md">Drink Information</h1>
+                            <div class="flex items-center m-5 gap-[20px]">
+                                <img src="data:image/jpeg;base64," th:attrappend="src=${selectedDrink.image}" alt="cashier" width="50%" class="rounded-md shadow-md">
+                                <div class="dist font-semibold lg:grid grid-cols-2 gap-1 gap-x-2 bg-white w-full p-4 rounded-md shadow-md md:block">
+                                    <p>Code:</p><p th:text="${selectedDrink.code}"></p>
+                                    <p>Name: </p><P th:text="${selectedDrink.name}"></P>
+                                    <p>Category: </p><p th:text="${selectedCategory.name}"></p>
+                                    <p>Price: </p><p th:text="${selectedDrink.price}"></p>
+                                    <p>Note: </p><p th:text="${selectedDrink.note}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- orderhistory -->
+    <div class="fixed top-0 left-0 w-full h-[100vh] items-center justify-center hidden bg-[rgba(0,0,0,0.4)]" id="popup-page">
+        <div class="w-2/3 h-5/6 bg-white rounded-md py-2 font-bold overflow-y-auto">
+            <button class="px-2 py-1 bg-red-600 text-white ml-2 rounded-md" onclick="history()">Close</button>
+            <h1 class="text-2xl text-bold text-center">Histories</h1>
+            <div class="orderhistory">
+                <div class="grid grid-cols-5 m-3 p-3 bg-[#044468] rounded-md text-neutral-100">
+                    <p>No</p>
+                    <p>Order number</p>
+                    <p>Table</p>
+                    <p>Price($)</p>
+                    <p class="pl-5">Date</p> 
+                </div>
+                <div class=" block ">
+                    <div th:each="invoice: ${invoices}" class="grid grid-cols-5 pl-5">
+                        <p th:text="${invoice.id}"></p>
+                        <p th:text="${invoice.number}"></p>
+                        <p th:text="${invoice.table_id}"></p>
+                        <p th:text="${invoice.price + '$'}"></p>
+                        <p th:text="${invoice.created_at}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+    
+        function storeSth(){
+            localStorage.setItem("deleted", "deleted")
+        }
+        //pop up page
+        let popupPage = document.getElementById("popup-page"); //form
+        let historyBtn = document.getElementById("Orderhistory");
+
+        historyBtn.addEventListener("click", history)
+
+        function history () {
+            if (popupPage.style.display === "flex") {
+                popupPage.style.display = "none";
+            } else {
+                popupPage.style.display = "flex";
+            }
+        }
+    </script>
+</body>
+
+</html>
+
+
+

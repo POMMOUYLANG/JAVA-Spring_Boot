@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .a1{
+            background-color: #548235;
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity));
+            border-radius: 0.25rem/* 4px */;
+            width: 100%;
+            height: 18vh;
+            padding: 1.25rem/* 20px */;
+        }
+
+        .a0{
+            background-color: red;
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity));
+            border-radius: 0.25rem/* 4px */;
+            width: 100%;
+            height: 18vh;
+            padding: 1.25rem/* 20px */;
+        }
+
+    </style>
+</head>
+<body class="p-1">
+    <div class="all flex flex-col justify-center">
+        <h1 class="text-5xl text-white w-full flex justify-center bg-[#044468] rounded-md shadow-md p-3">Table selection</h1>
+        <div class="flex flex-col items-center justify-center">
+            <div class="left-side w-2/3 grid grid-cols-6 gap-5 p-4">
+                <button th:each="table: ${tables}" th:id="${table.id}" th:class="${'a'+table.availability}" th:text="${table.number}"></button>
+            </div>
+            <div class="flex justify-end px-4 w-2/3">
+                <button class="bg-green-500 py-3 px-6 rounded text-white" onclick="openForm1()">Finish</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- form 1 -->
+    <div id="form1" class="fixed top-0 left-0 w-full h-full items-center justify-center bg-[rgba(0,0,0,0.2)] hidden">
+        <div class="bg-white p-8 rounded shadow-lg">
+            <h2 class="text-xl mb-4">Do you have any note for the customer?<span id="buttonName"></span></h2>
+            <form method="POST" th:object="${invoice}" th:action="@{/checkout/saveInvoice}">
+                <p id="tableAllert" class="text-red-500 pb-3">You have not selected a table yet!!!</p>
+                <input th:field="*{table_id}" id="tableID" type="text" class="hidden" required title="You have not selected a table yet">
+                <input th:field="*{product_order_ids}" th:value="${invoice.product_order_ids}" id="tableID" type="text" class="hidden">
+                <input th:field="*{number}" th:value="${number}" id="tableID" type="number" class="hidden">
+                <input th:field="*{price}" th:value="${price}" id="tableID" type="number" class="hidden">
+                
+                <input th:field="*{note}" type="text" class="border p-2 rounded w-full mb-4" placeholder="Write your note here">
+                <div class="flex justify-end">
+                    <div  onclick="closeForm1()" class="bg-red-500 text-white px-4 py-2 rounded cursor-pointer">Cancel</div>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded ml-2">OK</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- form 2 -->
+    <div id="form2" class="fixed h-[100vh] w-full top-0 left-0 items-center justify-center hidden">
+        <div id="container" class="w-fit bg-gray-200 p-6 rounded-md shadow-md">
+            <h1 class="text-2xl text-gray-700">Do you want to make this table available?</h1>
+            <form method="POST" th:action="@{/tableAvailebility/edit}" class="flex justify-between mt-7">
+                <input type="number" name="tableID" id="chTable" class="hidden">
+                <div onclick="closeForm2()" class="py-2 px-4 text-white w-1/3 font-bold rounded-xl bg-red-500 flex items-center justify-center cursor-pointer">No</div>
+                <button type="submit" class="py-2 px-4 text-white w-1/3 font-bold rounded-xl bg-green-500">Yes</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Form 1
+        function openForm1() {
+            document.getElementById("form1").style.display = "flex";
+        }
+        function closeForm1() {
+            document.getElementById("form1").style.display = "none";
+        }
+
+        const avalebleTables = document.getElementsByClassName("a1");
+        const tableSelected = e => {
+            let catID = e.target.id;  // Get ID of Clicked Element
+
+            for (let table of avalebleTables) {
+                table.style.backgroundColor = "#548235"
+            }
+            document.getElementById(catID).style.backgroundColor = "#c55a11"
+            document.getElementById("tableAllert").style.display = "none"
+            document.getElementById("tableID").value = catID;
+            
+        }
+        for (let table of avalebleTables) {
+            table.addEventListener("click", tableSelected);
+        }
+
+        // Form 2
+        function openForm2() {
+            document.getElementById("form2").style.display = "flex";
+        }
+        function closeForm2() {
+            document.getElementById("form2").style.display = "none";
+        }
+
+        const unavalebleTables = document.getElementsByClassName("a0");
+        const unavailebleTableSelected = e => {
+            let catID = e.target.id;  // Get ID of Clicked Element
+            
+            openForm2()
+            document.getElementById("chTable").value = catID;
+            
+        }
+        for (let table of unavalebleTables) {
+            table.addEventListener("click", unavailebleTableSelected);
+        }
+
+    </script>
+</body>
+</html>

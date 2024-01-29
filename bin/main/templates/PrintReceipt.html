@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Receipt</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        .wrapper{
+            margin: auto;
+            border: 2px solid black;
+            width: 600px;
+            height: auto;
+            padding: 30px;
+            background-color: white;
+        }
+        .header > p{
+            font-size: 1rem;
+        }
+        h2{
+            color: black;
+            font-size:1.1rem;
+        }
+        .border{
+            border-bottom: 2px solid black;
+        }
+        .sub_content{
+            display: flex;
+            justify-content: space-around;
+            color:blue;
+        }
+        p{
+            font-size: 1rem;
+        }
+        .subcontent1{
+            padding-bottom: 10px;
+        }
+        .sub_content1{
+            display: flex;
+            justify-content: space-between;
+            height: 35px;
+        }
+        .sub_content2{
+            display: flex;
+            justify-content: space-between;
+            color: blue;
+        }
+        .subcontent3{
+            height: fit-content;
+        }
+        .sub_content3{
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        .sub_content3 >p{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+        .sub_content3 >p:first-child{
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+        .sub_content3 >p:last-child{
+            display: flex;
+            flex-direction: row;
+            justify-content: end;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+        
+        .total{
+            width: 55%;
+        }
+        .sub_total{
+            display: flex;
+            justify-content: space-around;
+        }
+       .goback{
+        display: flex;
+        justify-content: center;
+        margin-top: 4px;
+       }
+        
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <h2>GIC COFFEE</h2>
+            <p>COFFEE AND CODE</p>
+        </div>
+        <div class="border"></div>
+        <p th:text="${'Order Number: ' + invoice.number}"></p>
+        <div class="border"></div>
+        <div class="content">
+            <p>gic.itc.edu.kh</p> 
+        </div>
+        <div class="border"></div>
+        <div class="sub_content">
+            <div>DINE IN</div>
+            <div>BILL</div>
+            <div th:text="${invoice.id}"></div>
+        </div>
+        <div class="border"></div>
+        <div class="subcontent1">
+            <div class="sub_content1">
+                <p id="cashierName"></p>
+                <p th:text="${'Table : ' + invoice.table_id}"></p>
+            </div>
+            <div class="sub_content1">
+                <p th:text="${'T-in : ' + invoice.created_at}"></p>
+                <p th:text="${'T-out : ' + receipt.created_at}"></p>
+            </div>
+        </div>
+        <div class="border"></div>
+        <div class="sub_content2">
+            <div>Description</div>
+            <div>QT</div>
+            <div>Unit Price</div>
+            <div>Amount</div>
+        </div>
+        <div class="border"></div>
+        <div class="subcontent3">
+            <div th:each="order: ${allOrders}" class="sub_content3">
+                <p th:text="${order.getProduct().getName()}">1</p>
+                <p th:text="${order.getSize().getName() + '  ' + order.getProduct_order().getAmount()}">Regular 1</p>
+                <p th:text="${order.getOrderPrice()}">d</p>
+                <p th:text="${order.getOrderPrice() * order.getProduct_order().getAmount()}">f</p>
+            </div>
+        </div>
+        <div class="border"></div>
+        <div class="total">
+            <div class="sub_total">
+                <b><p>Total: </p></b>
+                <b><p th:text="${invoice.price}"></p></b>
+            </div>
+            <div class="border"></div>
+            <div class="sub_total">
+                <p>Cash received: </p>
+                <p th:text="${receipt.cash_received}"></p>
+            </div>
+            <div class="border"></div>
+            <div class="sub_total">
+                <p>Cash change: </p>
+                <p th:text="${receipt.cash_change}"></p>
+            </div>
+        </div>
+        <div class="border"></div>
+        <div class="End_content">
+            <p>Note for customer: <span th:text="${invoice.note}"></span></p>
+            <p>WiFi Password: cappuccino</p>
+            <p>Delivery Hotline: 023 215 215</p>
+        </div>
+    </div>
+    <div class="goback">
+        <a th:href="@{/user/clear_current_order}">Go bach to product selection</a>
+    </div>
+    <script>
+        document.getElementById("cashierName").textContent = "Cashier : " + localStorage.getItem("username")
+    </script>
+</body>
+</html>

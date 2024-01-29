@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>11</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700');
+
+body{
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  font-family: 'Roboto Condensed', sans-serif;
+  color: #262626;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container{
+  width: 100%;
+}
+@media (min-width: 1200px)
+{
+  .container{
+    max-width: 1140px;
+  }
+}
+.d-flex{
+  display: flex;
+  flex-direction: row;
+  border-radius: 0 0 5px 5px;
+  padding: 25px;
+}
+form{
+  flex: 4;
+}
+label, table{
+  display: block;
+  margin: 15px;
+}
+label>span{
+  float: left;
+  width: 25%;
+  margin-top: 12px;
+  padding-right: 10px;
+}
+input[type="text"], input[type="tel"], input[type="email"], select
+{
+  width: 70%;
+  height: 30px;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  border: 1px solid #dadada;
+  color: #888;
+}
+select{
+  width: 72%;
+  height: 45px;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+}
+.Yorder{
+  margin-top: 15px;
+  height: 600px;
+  padding: 20px;
+  border: 1px solid #dadada;
+}
+table{
+  margin: 0;
+  padding: 0;
+}
+th{
+  border-bottom: 1px solid #dadada;
+  padding: 10px 0;
+}
+tr>td:nth-child(1){
+  text-align: left;
+  color: #2d2d2a;
+}
+tr>td:nth-child(2){
+  text-align: right;
+  color: #52ad9c;
+}
+td{
+  border-bottom: 1px solid #dadada;
+  padding: 25px 25px 25px 0;
+}
+
+p{
+  display: block;
+  color: #888;
+  margin: 0;
+  padding-left: 25px;
+}
+.Yorder>div{
+  padding: 15px 0; 
+}
+</style>
+<body class="bg-gray-100">
+  <div class="container w-[80%] bg-white p-3 rounded-md shadow-md">
+    <h2 class="bg-[#044468] flex justify-center items-center text-white text-4xl font-bold p-3 rounded-md shadow-md">New Product Form</h2>
+    <div class="d-flex">
+      <form th:action="@{/product_management/add_new_product/save}" method="POST" th:object="${drink}" enctype="multipart/form-data">
+        <label>
+          <span class="fname">Product Code <span class="required">*</span></span>
+          <input required th:field="*{code}" type="text" name="dcode">
+        </label>
+        <label>
+          <span class="lname">Product Name<span class="required">*</span></span>
+          <input required th:field="*{name}" type="text" name="dname">
+        </label>
+        <label class="flex">
+          <span>Category <span class="required">*</span></span>
+          <select th:field="*{category_id}" name="selection" class="w-96 mr-5">
+            <option  th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+          </select>
+          <img class="w-9 h-fit cursor-pointer" src="https://static-00.iconduck.com/assets.00/plus-icon-1024x1024-jdaf40nu.png" onclick="openCal()" alt="">
+        </label>
+        <label>
+          <span>Price <span class="required">*</span></span>
+          <input required th:field="*{price}" type="text" name="Price"> 
+        </label>
+        <label>
+          <span>Note </span>
+          <input required th:field="*{note}" type="text" name="note"> 
+        </label>
+        <div class="custom-file mb-4 flex items-center ">
+          <label class="custom-file-label mr-52" for="customFile">Product Image</label>
+          <input required type="file" name="file" class="custom-file-input" id="customFile"> 
+        </div>
+        <label style="display: flex;">
+          <button type="submit" class="Ok bg-blue-600 text-white rounded-md px-8 py-2 font-bold mr-3" onclick="setAdd()">Ok</button>
+          <a th:href="@{/admin/product_management/drink}">
+            <button type="button" class="cancel Ok bg-red-600 text-white rounded-md px-5 py-2 font-bold">Cancel</button>
+          </a>
+        </label>
+      </form>
+    </div>
+  </div>
+
+<!-- category form -->
+<div id="newCat" class="hidden fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)]">
+  <div class="flex items-center justify-center h-full">
+    <div class="w-1/2 bg-white rounded-md h-fit p-4">
+      <form th:action="@{/product_management/save_new_category_from_product}" method="POST">
+        <h2 class="flex items-center justify-center bg-[#044468] rounded-md text-white py-2">New Category</h2>
+        <div class="content flex items-center">
+            <label for="#">Category code :</label>
+            <input required name="code" type="text" placeholder="code of ctegory">
+        </div>
+        <div class="content flex items-center">
+            <label for="#">Category name :</label>
+            <input required name="name" type="text" placeholder="name of category">
+        </div>
+
+        <div class="flex items-center ml-4">
+          <input type="radio" id="drink" name="type" value="drink" checked>
+          <label for="drink">drink</label>
+          <input type="radio" id="food" name="type" value="food">
+          <label for="food">food</label><br>
+        </div>
+
+        <div class="btn flex">
+            <button class="Ok bg-blue-600 text-white rounded-md px-8 py-2 font-bold mr-3" type="submit" >Ok</button>
+            <div onclick="closeCal()" class="cancel Ok bg-red-600 text-white rounded-md px-5 py-2 font-bold cursor-pointer">Cancel</div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+  <script>
+    function setAdd(){
+      localStorage.setItem("added", "added")
+    }
+
+    function openCal() {
+        document.getElementById("newCat").style.display = "block";
+    }
+
+    /* Function to close the pop-up form */
+    function closeCal() {
+        document.getElementById("newCat").style.display = "none";
+    }
+  </script>
+</body>
+</html>
